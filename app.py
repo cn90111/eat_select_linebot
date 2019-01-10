@@ -13,17 +13,12 @@ import random
 
 import json
 
-host='http://api.thingspeak.com'
-read_api_key='EEJVY94NPX366TX3'
-channel_id='618532'
-url='%s/channels/%s/feeds/last.json?api_key=%s' \
-     %(host, channel_id, read_api_key)
 app = Flask(__name__)
 
 # Channel Access Token
-line_bot_api = LineBotApi('Ol5cQvtsoujHtK58E93N1T7EefZyntOhUv2UZAdlpG47nNRXJkkGTfF8DpDMfs3nbyCJyKgxSBciQe7zn3bYqUAg/5KfV+orLnUQz+QSJBM2n8xwtn4UYhluwN3yXt7AuP1VGQ0Whc+siQHg4wbIawdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('YOUR_CHANNEL_ACCESS_TOKEN')
 # Channel Secret
-handler = WebhookHandler('08c5f664bbbd7d5f0435a2de312d97fe')
+handler = WebhookHandler('YOUR_CHANNEL_SECRET')
 
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
