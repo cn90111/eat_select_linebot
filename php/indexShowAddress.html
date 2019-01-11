@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>吃飯機器人網頁</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+         /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+         #map {
+             height: 100%;
+         }
+         /* Optional: Makes the sample page fill the window. */
+         html, body {
+             height: 100%;
+             margin: 0;
+             padding: 0;
+         }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        var map;
+        var maker;
+        var geocoder;
+        var temp = false;        
+        //var myLats = [];
+        //var myLngs = [];
+        var myAddress = [];
+        var myCenter = { lat: 24.1209446, lng: 120.6742369 };                    
+
+        function initMap() 
+        {
+            // geocoder = new google.maps.Geocoder();            
+            var param = location.search.split("?")
+            $.ajax({                    
+                url: 'getData.php', //用以讀取資料的檔案  
+                data: param[1],       //參數，若有需要可以傳遞給php檔，例如"id=5&parent=6"
+                dataType: 'json',   //資料格式    
+                success:  getDataSuccess
+            });
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: myCenter,
+                title: '目前位置',
+                zoom: 16
+            });
+        }
+
+        function getDataSuccess(data) 
+        {
+            var infowindow = new google.maps.InfoWindow;
+            for (i = 0; i < data.length; i++) 
+            {               
+                codeAddress(data[i][0].toString(),data[i][1],data[i][2],infowindow);
+            }            
+        }
+
+        function codeAddress(address1,longitude,latitude,infowindow)
+        {                  
+            var myCenter = { lat: parseFloat(latitude), lng: parseFloat(longitude)};
+            map.setCenter(myCenter);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: myCenter,
+                title:address1
+            }); // end maker 
+            marker.addListener('click', function() {                 
+              var myconnect = window.location.href='https://www.google.com.tw/maps/search/'+address1+'/';              
+              infowindow.setContent(myconnect);
+                infowindow.open(map, marker);
+            });            
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-vu1AXRY1Sb_M2_TIfejGxnFnjEgFJ00&callback=initMap"
+            async defer></script>
+</body>
+</html>
